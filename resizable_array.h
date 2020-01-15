@@ -26,12 +26,7 @@
 #define DEC_MULTIPLE 0.5
 #define DEC_FRACT 0.25
 
-struct r_array {
-        void * data;
-        size_t capacity;
-        size_t size;
-        size_t unit; /* size of each elt in bytes */ 
-};
+struct r_array;
 
 typedef VECTOR struct r_array;
 

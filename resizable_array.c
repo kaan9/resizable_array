@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 struct r_array {
-        void * data;
+        char * data;
         size_t capacity;
         size_t size;
         size_t unit; /* size of each elt in bytes */ 
@@ -34,37 +34,64 @@ size_t vector_size(VECTOR * v)
 
 static int vector_recapacity(VECTOR * v, size_t new_cap)
 {
-        
+        realloc(v->data, sizeof(char) * v->unit * INIT_CAPACITY);
+        v->capacity = INIT_CAPACITY;
 }
 
-int vector_clear(VECTOR * v)
+void vector_clear(VECTOR * v)
 {
-        
+        realloc(v->data, sizeof(char) * v->unit * INIT_CAPACITY);
+        v->capacity = INIT_CAPACITY;
+        v->size = 0;
+        return 0;
 }
 
-void vector_delete(VECTOR * v);
+void vector_delete(VECTOR * v)
+{
+        free(v->data);
+        free(v);
+}
 
-/* 
- * creates a new vector with data form indices start 
- * to end (inclusive) copied from v
- */
-VECTOR * duplicate(VECTOR * v, size_t start, size_t end);
+static size_t max(size_t a, size_t b)
+{
+        return a > b ? a : b;
+}
 
-/*
- * returns a pointer to the start of stored data
- * should be cast to a pointer of the stored type
- * (e.g. int*) for meaningful access
- */
-void * vector_data(VECTOR * v);
+VECTOR * duplicate(VECTOR * v, size_t start, size_t end)
+{
+        VECTOR * v2 = malloc(sizeof(VECTOR));
+        if(!v2) return NULL;
 
-/* 
- * returns a pointer of the location of the data
- * at index, should be cast and then dereferenced
- * to access data
- */
-void * vector_at(VECTOR * v, size_t index);
+        v2->capacity = max(INIT_CAPACITY, end - start + 1);
+        v2->data = malloc(sizeof(char) * (v2->unit = v->unit) * v2->capacity);
+        if (!v2->data) {
+                free(v2);
+                return NULL;
+        }
 
-void * vector_push_back(VECTOR * v, void * elt);
+        v2->size = end - start + 1;
+        memcpy(v2->data, v->data + v->unit * start, v->unit * (end - start + 1));
+
+        return v2;
+}
+void * vector_data(VECTOR * v)
+{
+        return v->data;
+}
+
+void * vector_at(VECTOR * v, size_t index)
+{
+        return v->data + v->unit * index;
+}
+
+void * vector_push_back(VECTOR * v, void * elt)
+{
+        if (v->size < v->capacity) {
+                memcpy(v->data + v->unit * v->size++, elt, v->unit);
+        } else {
+                
+        }
+}
 
 void * vector_push_front(VECTOR * v, void * elt);
 

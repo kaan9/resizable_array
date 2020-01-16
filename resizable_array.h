@@ -35,7 +35,7 @@ VECTOR * vector_init(size_t unit);
 
 size_t vector_size(VECTOR * v);
 
-int vector_clear(VECTOR * v);
+void vector_clear(VECTOR * v);
 
 void vector_delete(VECTOR * v);
 

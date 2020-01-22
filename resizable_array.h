@@ -28,42 +28,57 @@
 
 struct r_array;
 
-typedef VECTOR struct r_array;
+typedef struct r_array VECTOR;
+
+
+/**** Creation and Destruction ****/
 
 /* returns an empty vector with elts of size unit */
-VECTOR * vector_init(size_t unit);
+VECTOR *
+vector_init(size_t unit);
 
-size_t vector_size(VECTOR * v);
+/* copy with start and end inclusive */ 
+VECTOR *
+duplicate(VECTOR * v, size_t start, size_t end);
 
-void vector_clear(VECTOR * v);
+void
+vector_delete(VECTOR * v);
 
-void vector_delete(VECTOR * v);
+/**** Properties ****/
 
-/* 
- * creates a new vector with data form indices start 
- * to end (inclusive) copied from v
- */
-VECTOR * duplicate(VECTOR * v, size_t start, size_t end);
+size_t
+vector_size(VECTOR * v);
 
-/*
- * returns a pointer to the start of stored data
- * should be cast to a pointer of the stored type
- * (e.g. int*) for meaningful access
- */
-void * vector_data(VECTOR * v);
+
+/**** Access ****/
 
 /* 
  * returns a pointer of the location of the data
  * at index, should be cast and then dereferenced
  * to access data
  */
-void * vector_at(VECTOR * v, size_t index);
+void *
+vector_at(VECTOR * v, size_t index);
 
-void * vector_push_back(VECTOR * v, void * elt);
+/*
+ * returns a pointer to the start of stored data
+ * should be cast to a pointer of the stored type
+ * (e.g. int*) for meaningful access
+ */
+void *
+vector_data(VECTOR * v);
 
-void * vector_push_front(VECTOR * v, void * elt);
 
-void * vector_pop_back(VECTOR * v);
+/**** Modification ****/
 
-void * vector_pop_front(VECTOR * v);
+void
+vector_set(VECTOR * v, void * elt);
 
+void
+vector_clear(VECTOR * v);
+
+void
+vector_push(VECTOR * v, void * elt);
+
+void *
+vector_pop(VECTOR * v);
